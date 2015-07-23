@@ -17,21 +17,21 @@ class {{CONTROLLER}} extends CI_Controller
 		/*
 		*	
 		*/
-		$this->load->template('{{VIEW_LIST}}');
+		$this->load->view('{{VIEW_LIST}}');
 	}
 
 	public function create()
 	{
 		$data['content']['id']	= 0;
-		$this->load->template('{{VIEW_FORM}}', $data);
-	}
+		$this->load->view('{{VIEW_FORM}}', $data);
+	}	
 
 	public function edit($id)
 	{	
 		$data['content'] = $this->{{MODEL}}->get($id);
-		$this->load->template('{{VIEW_FORM}}', $data);
+		$this->load->view('{{VIEW_FORM}}', $data);
 	}
-
+	
 	public function store( $id = 0)
 	{
 		$rules = Array(
