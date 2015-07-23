@@ -1,0 +1,15 @@
+<?php	
+/*
+*   comand line interface
+*	require files template => Array( 
+		template/controller_template.txt,
+		template/model_template.txt,
+		template/view_form_template.txt,
+		template/view_list_template.txt,
+	);
+*/
+$myroute = dirname( dirname( __FILE__ ) );
+		
+DEFINE('APPPATH', $myroute .'/application/');
+			
+include_once  'core/building.php';

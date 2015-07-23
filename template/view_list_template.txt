@@ -1,0 +1,72 @@
+<div class="container">		
+   	<form  id="view-list-form" class="form-horizontal" 
+   			method="post" accept-charset="utf-8">
+   		
+        <div class="form-group">  
+            <label class="col-sm-4 control-label">Form text</label>
+            <div class="col-sm-5">
+                <input type="text"  class="form-control" />
+            </div>
+        </div>
+
+        <div class="form-group">    
+            <label for="fecha" class="col-sm-4 control-label"></label>
+            <div class="col-sm-5">
+                <button type="submit" class="btn btn-default">Find</button>
+                <a class="btn btn-primary" href="/{{CONTROLLER_NAME}}/create/">Create</a>
+            </div>
+        </div>
+       
+    </form>
+		
+	<div class="table-responsive">
+		<table class="table table-striped">
+			<caption>List {{CONTROLLER}}</caption>
+			<thead>
+				<tr>	
+					<th>id</th>
+					<th>date</th>
+					<th>action</th>
+				</tr>
+			</thead>
+			<tbody id="view-list-filter-{{CONTROLLER_NAME}}">
+			</tbody>	
+		</table>
+	</div>
+	
+</div>
+<!--
+<script type="text/javascript" charset="utf-8" async defer>
+		
+		$("#view-list-form").on("submit",function( event ){
+			$data = $(this).serializeObject( this );
+			
+			$.ajax({
+				url:'/{{CONTROLLER}}/filter/',
+	            data: $data,
+	            type:'post',
+	            dataType:'json',
+	            befforeSend:function(){
+	            	$("#view-list-filter-{{CONTROLLER}}").html('');
+	            },
+	            success:function( response ){
+	            	var html = '';
+	            	for (var i = 0; i<response.total ; i++ ) {
+	            		html+='<tr>';	
+	            			html+='<td>'+response.{{CONTROLLER}}.id[i]+'</td>';
+	            			html+='<td>'+response.{{CONTROLLER}}.date_create[i]+'</td>';
+	            		html+='</tr>';
+	            	};
+	            	$("#view-list-filter-{{CONTROLLER}}").html(response);
+	            },
+	            error:function(e,m){
+	            	console.log("error " + e.responseText );
+	            }
+			});
+		});
+
+	});
+    
+</script>
+
+-->

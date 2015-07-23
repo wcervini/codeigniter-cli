@@ -1,0 +1,87 @@
+<?php if (!defined('BASEPATH')) exit('No direct script access allowed');
+/*		
+*	@date:{{DATE}}
+*	@author:{{USER}}
+*	@description:
+*/	
+class {{CONTROLLER}} extends CI_Controller
+{		
+	public function __construct()
+	{	
+		parent::__construct();	
+		$this->load->model('{{MODEL}}');
+	}	
+			
+	public function index()
+	{
+		/*
+		*	
+		*/
+		$this->load->template('{{VIEW_LIST}}');
+	}
+
+	public function create()
+	{
+		$data['content']['id']	= 0;
+		$this->load->template('{{VIEW_FORM}}', $data);
+	}
+
+	public function edit($id)
+	{	
+		$data['content'] = $this->{{MODEL}}->get($id);
+		$this->load->template('{{VIEW_FORM}}', $data);
+	}
+
+	public function store( $id = 0)
+	{
+		$rules = Array(
+			['field' => 'name', 'label'=> 'Name', 'rules' => 'required']
+		);
+		$this->form_validation->set_rules( $rules );
+		
+		if($this->form_validation->run())
+		{	
+			if($id)
+			{	
+				$model = $this->{{MODEL}}->get( $id );
+			}else{
+				$model = $this->{{MODEL}};
+			}
+				
+			/*{{FIELDS_STORE_STORE}}*/
+			$model->name = $this->input('name');
+			$model->save();
+
+			redirect('/{{CONTROLLER_NAME}}/edit/' . $id );
+		}
+		else{	
+			$data['content'] = $this->input->post();
+			$this->load->view('{{VIEW_FORM}}', $data );
+		}
+	}
+
+	public function delete( $id )
+	{	
+		if($delete = $this->{{MODEL}}->delete( $id ) )
+		{	
+			redirect('/{{CONTROLLER_NAME}}/');	
+		}
+	}
+
+	public function filter()
+	{
+		if($this->input->is_ajax_request())
+		{
+			$parms['content']['{{MODEL}}'] = $this->{{MODEL}}->filter(  $this->input->post('id') );
+
+			$parms['content']['total'] 	= count($parms['content']['{{MODEL}}']);
+			echo json_encode($parms['vars'] );
+
+		}else{
+			echo json_encode(array(	'Error' => 500, 
+									'message' => 'No exist ajax request'));
+		}
+	}
+}	
+/* End of file '{{CONTROLLER}}' */
+/* Location: ./application/controllers/{{CONTROLLER}}.php */
