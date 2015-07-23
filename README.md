@@ -8,37 +8,44 @@ This project streamlines the speed and standardization of software for the model
 1.- codeigniter 3.0
 2.- Download folder cli on project /mycodeigniter/ or edit APPPATH to route ci
 3.- Bootstrap css <= not required
-<ol>
-	<li>Demostration</li>
-	<li>Edit</li>
-</ol>
-### Use
-1.- access to path codeigniter-cli:
-	> cd cli/
-2.- see all help:
-	> php codeigniter-cli
-		new	app			name		 Generate controller, model and views
-		new	controller	name		 Generate controller and utils
-		new	model		name		 Generate model and utils
-		new	views		name		 Generate views foldername / list and form
-		new	view_form	name|folder/name Generate view form
-		new	view_list	name|folder/name Generate view list 
-3.- generate new catalog of products:
-	> php codeigniter-cli new app products
-		Model products was created
-		Controller products was created
-		Views products was created
 
-	see results in:
-	localhost/index.php/products/
-	localhost/index.php/products/create/
-	localhost/index.php/products/edit/1
+### Use
+<ol>
+	<li>
+		Access to path codeigniter-cli:<br>
+		> cd cli/
+	</li>
+	<li>
+		See all help:<br>
+		> php codeigniter-cli 
+		<br> new	app			name		 Generate controller, model and views
+		<br> new	controller	name		 Generate controller and utils
+		<br> new	model		name		 Generate model and utils
+		<br> new	views		name		 Generate views foldername / list and form
+		<br> new	view_form	name|folder/name Generate view form
+		<br> new	view_list	name|folder/name Generate view list 
+	</li>
+	<li>
+		Generate new catalog of products: <br>
+		> php codeigniter-cli new app products
+		<br>Model products was created
+		<br>Controller products was created
+		<br>Views products was created
+		<p>
+			see results in:
+			<br>localhost/index.php/products/
+			<br>localhost/index.php/products/create/
+			<br>localhost/index.php/products/edit/1
+		</p>
+	</li>	
+</ol>
 
 ### Config my template
 You can modify or replace templates in folder template/ all files required
-	controller_template.txt  
-	model_template.txt 
-	view_form_template.txt 
-	view_list_template.txt
-
+<br>
+	controller_template.txt<br>
+	model_template.txt <br>
+	view_form_template.txt <br>
+	view_list_template.txt<br>
+<br>
 You can also modify the path of the project by assigning the application system
