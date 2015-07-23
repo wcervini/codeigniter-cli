@@ -5,9 +5,9 @@ This is the preliminary codeigniter comand line interface.
 This project streamlines the speed and standardization of software for the model, view and controller of codeigniter.
 
 ### Requirements
-1.- codeigniter 3.0
-2.- Download folder cli on project /mycodeigniter/ or edit APPPATH to route ci
-3.- Bootstrap css <= not required
+1.- codeigniter 3.0<br>
+2.- Download folder cli on project /mycodeigniter/ or edit APPPATH to route ci<br>
+3.- Bootstrap css <= not required<br>
 
 ### Use
 <ol>
