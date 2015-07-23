@@ -8,7 +8,10 @@ This project streamlines the speed and standardization of software for the model
 1.- codeigniter 3.0
 2.- Download folder cli on project /mycodeigniter/ or edit APPPATH to route ci
 3.- Bootstrap css <= not required
-
+<ol>
+	<li>Demostration</li>
+	<li>Edit</li>
+</ol>
 ### Use
 1.- access to path codeigniter-cli:
 	> cd cli/
