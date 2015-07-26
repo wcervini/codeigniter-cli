@@ -7,9 +7,9 @@ Class Building{
     public function __construct($argv)
     {
         $this->parms    = $argv;   
-        $arr_activity   = array('new', 'help', 'h'); 
-        $arr_option     = array('app','controller','model','views','view_list','view_form'); 
-            
+        $arr_activity   = array('new', 'help', 'create', 'h'); 
+        $arr_option     = array('app','controller','model','views','view_list','view_form','encryption_key'); 
+
         $activity       = filter_var(@$argv[1], FILTER_SANITIZE_STRING);
         $option         = filter_var(@$argv[2], FILTER_SANITIZE_STRING);
         $name           = filter_var(@$argv[3], FILTER_SANITIZE_STRING);
@@ -27,6 +27,18 @@ Class Building{
                 self::help();
                 return false;
             }
+
+            /* New activity option */
+            
+            if ($activity=='create'){
+                switch ($option) {
+                    case 'encryption_key':
+                    $this->createKey($name);
+                    break;                  
+                }
+                return true;
+            }
+            
             if(in_array($option, $arr_option))
             {
 
@@ -42,25 +54,25 @@ Class Building{
 
                     switch ($option) {
                         case 'app':  
-                            $this->new_model($name);
-                            $this->new_controller($name);
-                            $this->new_views($name);
-                            break;
+                        $this->new_model($name);
+                        $this->new_controller($name);
+                        $this->new_views($name);
+                        break;
                         case 'model':
-                            $this->new_model($name);
-                            break;  
+                        $this->new_model($name);
+                        break;  
                         case 'controller':  
-                            $this->new_controller($name);
-                            break;  
+                        $this->new_controller($name);
+                        break;  
                         case 'views':    
-                            $this->new_views($name);
-                            break;
+                        $this->new_views($name);
+                        break;
                         case 'view_list':
-                            $this->new_view_list($name);
-                            break;
+                        $this->new_view_list($name);
+                        break;
                         case 'view_form':
-                            $this->new_view_form($name);
-                            break;
+                        $this->new_view_form($name);
+                        break;
                     }   
                 }else{  
                     self::term('jump',2);
@@ -141,11 +153,19 @@ Class Building{
         self::message('name|folder/name','cyan');   //self::term('tab');   
         self::message(' Generate view list ','light_gray');
         self::term('jump');
+        /*
+        *   encription_key
+        */      
+        self::message(' create','light_green');        self::term('tab');
+        self::message('encryption_key','green');         self::term('tab');  
+        self::message('[string to hash]','cyan');   //self::term('tab');   
+        self::message(' Create encryption key into config.php ','light_gray');
+        self::term('jump');
     }           
 
     private function message( $str , $color = 'black'   )
     {
-            
+
         $color_text['black']        = '0;30';
         $color_text['dark_gray']    = '1;30';
         $color_text['blue']         = '0;34';
@@ -168,7 +188,7 @@ Class Building{
 
     private function new_model($name )
     {
-        
+
         $names  = $this->_names( $name );  
         $file_controller = APPPATH.'models/'.$names['{{MODEL_FILE}}'].'.php';
         if(file_exists($file_controller))
@@ -179,11 +199,11 @@ Class Building{
         }else
         {   
             $this->_save_file(   
-                            $file_controller, 
-                            $this->_get_content_and_replace( 'model_template.txt', $names ) 
-                        );
+                $file_controller, 
+                $this->_get_content_and_replace( 'model_template.txt', $names ) 
+                );
         }   
-            
+
         self::message(' Model ','light_green');
         self::message( $name ,'white');
         self::message(' was created','light_green');
@@ -202,10 +222,10 @@ Class Building{
         }else
         {           
             $this->_save_file(   
-                            $file_controller, 
-                            $this->_get_content_and_replace( 'controller_template.txt', $names ) 
-                        );
-                
+                $file_controller, 
+                $this->_get_content_and_replace( 'controller_template.txt', $names ) 
+                );
+
         }   
 
         self::message(' Controller ','light_green');
@@ -217,29 +237,30 @@ Class Building{
     private function new_views($name)
     {
 
-    	$names  = $this->_names( $name );
+        $names  = $this->_names( $name );
 
         $file_list = APPPATH.'views/'.$names['{{VIEW_LIST}}'].'.php';
         $file_form = APPPATH.'views/'.$names['{{VIEW_FORM}}'].'.php';
-       	$dir 	   = APPPATH.'views/'.strtolower($name).'/';
+        $dir       = APPPATH.'views/'.strtolower($name).'/';
 
         if(file_exists($file_list) || file_exists($file_form)  )
         {           
             self::message(' Views already exists in the application/views/'.$names['{{VIEW_LIST}}'].'.php or application/views/'.$names['{{VIEW_FORM}}'].'.php  directory.','red');
             self::term('jump',2);
-            return false;	
-        }else
+            return false;   
+        }
+        else
         {       
-        	$create_dir   = (!file_exists($dir) ) ? mkdir( $dir , 0777, true) : FALSE;
+            $create_dir   = (!file_exists($dir) ) ? mkdir( $dir , 0777, true) : FALSE;
 
-			$this->_save_file(   
-                            $file_list, 
-                            $this->_get_content_and_replace( 'view_list_template.txt', $names ) 
-                        );
+            $this->_save_file(   
+                $file_list, 
+                $this->_get_content_and_replace( 'view_list_template.txt', $names ) 
+                );
             $this->_save_file(
-                            $file_form, 
-                            $this->_get_content_and_replace( 'view_form_template.txt', $names ) 
-                        );
+                $file_form, 
+                $this->_get_content_and_replace( 'view_form_template.txt', $names ) 
+                );
         } 
 
         self::message(' Views ','light_green');  
@@ -255,7 +276,7 @@ Class Building{
         $names['{{VIEW_LIST}}'] =  strtolower($name);
 
         $route = explode("/",$name); 
-        
+
         if(count($route)>1)
         {           
             $dir        = APPPATH.'views/'.strtolower($route[0]).'/';    
@@ -282,11 +303,11 @@ Class Building{
                     mkdir( $dir , 0777, true); 
                 }    
             }   
-            
+
             $this->_save_file(   
-                            $file_list, 
-                            $this->_get_content_and_replace( 'view_list_template.txt', $names ) 
-                        );
+                $file_list, 
+                $this->_get_content_and_replace( 'view_list_template.txt', $names ) 
+                );
         } 
 
         self::message(' Views ','light_green');  
@@ -297,9 +318,9 @@ Class Building{
 
     private function new_view_form($name)
     {
-        $names                  = $this->_names( $name );
+        $names = $this->_names( $name );
         $names['{{VIEW_FORM}}'] =  strtolower( $name );
-            
+
         $route = explode("/",$name); 
         if(count($route)>1)
         {           
@@ -330,9 +351,9 @@ Class Building{
             //self::message("mi route [{$file_list}]",'light_green');  
             //return false;
             $this->_save_file(
-                            $file_list,
-                            $this->_get_content_and_replace( 'view_form_template.txt', $names ) 
-                        );
+                $file_list,
+                $this->_get_content_and_replace( 'view_form_template.txt', $names ) 
+                );
         } 
 
         self::message(' Views ','light_green');  
@@ -352,7 +373,7 @@ Class Building{
         }
         echo $terminal;
     }
-    
+
     private function _names($str)  
     {   
         $strtolower                   = strtolower($str);
@@ -362,7 +383,7 @@ Class Building{
         $names['{{MODEL_FILE}}']      = ucfirst($strtolower)."_model";
         $names['{{MODEL_TABLE}}']     = $strtolower;
         $names['{{MODEL}}']           = ucfirst($strtolower)."_model"; 
-        			
+
         $names['{{VIEW_FORM}}']       = $strtolower."/view-form-".$strtolower;
         $names['{{VIEW_LIST}}']       = $strtolower."/view-list-".$strtolower;
 
@@ -372,21 +393,105 @@ Class Building{
         return $names;  
     }
 
-    private function _save_file( $file, $str )
-    {
-        $fp = fopen( $file , "w");
-        fputs($fp, $str);
-        fclose($fp);        
-    }  
-
     private function _get_content_and_replace( $file, $replace_names )
     {
         $f = file_get_contents('template/'. $file );
         return strtr($f,$replace_names);
-    }         
+    }  
+
+    /**
+    * _save_file
+    * Writes data to the file specified in the path.
+    * Not Creates a new file if non-existent.
+    *
+    * @param   string  $path   File path
+    * @param   string  $data   Data to write
+    * @return  bool
+    **/
+    
+    private function _save_file($file,$str)
+    {
+        $fp=fopen($file, "w");
+        $handle=fwrite($fp,$str);
+        fclose($fp);
+        // verify if changes save & return a bool
+        if($handle) {
+            return true;
+        }
+        return false;
+    }
+
+    /**
+    *
+    * create_key
+    * 
+    * @param string $plain_key  Key used for hash
+    * @return null
+    *
+    **/
+
+    private function createKey($plain_key = null) 
+    {
+        if(is_null($plain_key)) {
+            $plain_key = microtime();
+        }
+        $key = hash('ripemd128', $plain_key);
+        $files = $this->searchFiles(APPPATH.'config/','config.php');
+
+        if(!empty($files)) {
+            $search = '$config[\'encryption_key\'] = \'\';';
+            $replace = '$config[\'encryption_key\'] = \''.$key.'\';';
+
+            foreach($files as $file) {
+                $file = trim($file);
+                $f = file_get_contents($file);
+                if(strpos($f, $search)!==false) {
+                    $f = str_replace($search, $replace, $f);
+                    if($this->_save_file($file,$f)) {
+                        $this->message('Encryption key '.$key.' added to '.$file.'.','light_green');
+                        $this->term('jump',2);
+                    } else {
+                        $this->message('Couldn\'t write encryption key '.$key.' to '.$file.'.','yellow');
+                        $this->term('jump',2);
+                    }
+                } else {
+                    $this->message('Couldn\t find encryption_key or encryption_key already exists in '.$file.'.','yellow');
+                    $this->term('jump');
+                }
+            }
+        } else {
+            $this->message('Couldn\'t find config.php');
+            $this->term('jump');
+        }
+    }
+
+
+    /**
+    *
+    * searchFiles
+    * Search files inside a directory
+    *
+    * @param string $path path to search file
+    * @param string $file filename to search 
+    * @return array
+    **/
+   
+    private function searchFiles($path,$file)
+    {
+        $dir = new RecursiveDirectoryIterator($path);
+        $site = new RecursiveIteratorIterator($dir);
+        $files = array();
+        foreach($site as $oFile) {
+            if($oFile->getFilename()=='config.php') {
+                $found = str_replace('\\', '/', $oFile->getPath().'/'.$file);
+                $files[] = $found;
+            }
+        }
+        return $files;
+    }
 
 }   
-    
+
 if(php_sapi_name()==='cli')
 {       
     $parms = (isset($argv)) ? $argv : null;         
